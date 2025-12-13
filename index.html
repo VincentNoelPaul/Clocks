@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Clocks - Paris, Delhi, Hong Kong, Tokyo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: white;
+            margin: 30px 0;
+            text-align: center;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .clocks-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1400px;
+            padding: 20px;
+        }
+
+        .clock-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .clock-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .city-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .timezone {
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .time-display {
+            font-size: 3em;
+            font-weight: bold;
+            text-align: center;
+            color: #333;
+            margin: 20px 0;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .date-display {
+            font-size: 1.1em;
+            text-align: center;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .dst-info {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            min-height: 60px;
+        }
+
+        .dst-info.active {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+
+        .dst-label {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .dst-info.active .dst-label {
+            color: #ff9800;
+        }
+
+        .dst-text {
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .no-dst {
+            color: #999;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .time-display {
+                font-size: 2.2em;
+            }
+
+            .clocks-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🌍 World Clocks</h1>
+
+    <div class="clocks-container">
+        <div class="clock-card" id="paris">
+            <div class="city-name">Paris</div>
+            <div class="timezone">Europe/Paris</div>
+            <div class="time-display">--:--:--</div>
+            <div class="date-display">---</div>
+            <div class="dst-info">
+                <div class="dst-label">DST Information</div>
+                <div class="dst-text">Loading...</div>
+            </div>
+        </div>
+
+        <div class="clock-card" id="delhi">
+            <div class="city-name">Delhi</div>
+            <div class="timezone">Asia/Kolkata</div>
+            <div class="time-display">--:--:--</div>
+            <div class="date-display">---</div>
+            <div class="dst-info">
+                <div class="dst-label">DST Information</div>
+                <div class="dst-text">Loading...</div>
+            </div>
+        </div>
+
+        <div class="clock-card" id="hongkong">
+            <div class="city-name">Hong Kong</div>
+            <div class="timezone">Asia/Hong_Kong</div>
+            <div class="time-display">--:--:--</div>
+            <div class="date-display">---</div>
+            <div class="dst-info">
+                <div class="dst-label">DST Information</div>
+                <div class="dst-text">Loading...</div>
+            </div>
+        </div>
+
+        <div class="clock-card" id="tokyo">
+            <div class="city-name">Tokyo</div>
+            <div class="timezone">Asia/Tokyo</div>
+            <div class="time-display">--:--:--</div>
+            <div class="date-display">---</div>
+            <div class="dst-info">
+                <div class="dst-label">DST Information</div>
+                <div class="dst-text">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cities = [
+            { id: 'paris', timezone: 'Europe/Paris', name: 'Paris' },
+            { id: 'delhi', timezone: 'Asia/Kolkata', name: 'Delhi' },
+            { id: 'hongkong', timezone: 'Asia/Hong_Kong', name: 'Hong Kong' },
+            { id: 'tokyo', timezone: 'Asia/Tokyo', name: 'Tokyo' }
+        ];
+
+        // DST transition dates for 2025-2026 (approximate)
+        const dstTransitions = {
+            'Europe/Paris': [
+                { date: new Date('2025-03-30T01:00:00Z'), type: 'start', description: 'Clocks go forward 1 hour' },
+                { date: new Date('2025-10-26T01:00:00Z'), type: 'end', description: 'Clocks go back 1 hour' },
+                { date: new Date('2026-03-29T01:00:00Z'), type: 'start', description: 'Clocks go forward 1 hour' },
+                { date: new Date('2026-10-25T01:00:00Z'), type: 'end', description: 'Clocks go back 1 hour' }
+            ],
+            'Asia/Kolkata': [], // India does not observe DST
+            'Asia/Hong_Kong': [], // Hong Kong does not observe DST
+            'Asia/Tokyo': [] // Japan does not observe DST
+        };
+
+        function updateClock(city) {
+            const now = new Date();
+            const options = {
+                timeZone: city.timezone,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            };
+
+            const dateOptions = {
+                timeZone: city.timezone,
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+
+            const timeString = now.toLocaleTimeString('en-GB', options);
+            const dateString = now.toLocaleDateString('en-US', dateOptions);
+
+            const card = document.getElementById(city.id);
+            card.querySelector('.time-display').textContent = timeString;
+            card.querySelector('.date-display').textContent = dateString;
+        }
+
+        function getNextDSTChange(timezone) {
+            const transitions = dstTransitions[timezone];
+            if (!transitions || transitions.length === 0) {
+                return null;
+            }
+
+            const now = new Date();
+            for (let transition of transitions) {
+                if (transition.date > now) {
+                    return transition;
+                }
+            }
+            return null;
+        }
+
+        function updateDSTInfo(city) {
+            const card = document.getElementById(city.id);
+            const dstInfo = card.querySelector('.dst-info');
+            const dstText = card.querySelector('.dst-text');
+
+            const nextChange = getNextDSTChange(city.timezone);
+
+            if (!nextChange) {
+                if (dstTransitions[city.timezone].length === 0) {
+                    dstText.innerHTML = '<span class="no-dst">This region does not observe DST</span>';
+                } else {
+                    dstText.innerHTML = '<span class="no-dst">No upcoming DST changes</span>';
+                }
+                dstInfo.classList.remove('active');
+                return;
+            }
+
+            const now = new Date();
+            const daysUntil = Math.ceil((nextChange.date - now) / (1000 * 60 * 60 * 24));
+
+            if (daysUntil <= 30) {
+                dstInfo.classList.add('active');
+            } else {
+                dstInfo.classList.remove('active');
+            }
+
+            const changeType = nextChange.type === 'start' ? 'Summer Time' : 'Winter Time';
+            const dateStr = nextChange.date.toLocaleDateString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+                timeZone: city.timezone
+            });
+
+            dstText.innerHTML = `
+                <strong>${changeType}</strong> begins on ${dateStr}<br>
+                ${nextChange.description} (in ${daysUntil} day${daysUntil !== 1 ? 's' : ''})
+            `;
+        }
+
+        function updateAllClocks() {
+            cities.forEach(city => {
+                updateClock(city);
+            });
+        }
+
+        function initializeDSTInfo() {
+            cities.forEach(city => {
+                updateDSTInfo(city);
+            });
+        }
+
+        // Update clocks immediately and then every second
+        updateAllClocks();
+        initializeDSTInfo();
+        setInterval(updateAllClocks, 1000);
+
+        // Update DST info every hour
+        setInterval(initializeDSTInfo, 3600000);
+    </script>
+</body>
+</html>
