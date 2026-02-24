@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World Clocks - Paris, Delhi, Hong Kong, Tokyo</title>
+    <title>World Clocks - Mexico, France, Hong Kong/Taipei, Japan</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -54,9 +54,15 @@
         .city-name {
             font-size: 1.8em;
             font-weight: bold;
-            color: #667eea;
+            color: #11998e;
             margin-bottom: 10px;
             text-align: center;
+        }
+
+        .country-flag {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 5px;
         }
 
         .timezone {
@@ -83,8 +89,8 @@
         }
 
         .dst-info {
-            background: #f0f4ff;
-            border-left: 4px solid #667eea;
+            background: #f0faf5;
+            border-left: 4px solid #11998e;
             padding: 15px;
             margin-top: 20px;
             border-radius: 5px;
@@ -98,7 +104,7 @@
 
         .dst-label {
             font-weight: bold;
-            color: #667eea;
+            color: #11998e;
             font-size: 0.9em;
             margin-bottom: 5px;
         }
@@ -137,9 +143,22 @@
     <h1>🌍 World Clocks</h1>
 
     <div class="clocks-container">
-        <div class="clock-card" id="paris">
+        <div class="clock-card" id="mexico">
+            <div class="country-flag">🇲🇽</div>
+            <div class="city-name">Mexico City</div>
+            <div class="timezone">America/Mexico_City (CST, UTC-6)</div>
+            <div class="time-display">--:--:--</div>
+            <div class="date-display">---</div>
+            <div class="dst-info">
+                <div class="dst-label">DST Information</div>
+                <div class="dst-text">Loading...</div>
+            </div>
+        </div>
+
+        <div class="clock-card" id="france">
+            <div class="country-flag">🇫🇷</div>
             <div class="city-name">Paris</div>
-            <div class="timezone">Europe/Paris</div>
+            <div class="timezone">Europe/Paris (CET/CEST, UTC+1/+2)</div>
             <div class="time-display">--:--:--</div>
             <div class="date-display">---</div>
             <div class="dst-info">
@@ -148,9 +167,10 @@
             </div>
         </div>
 
-        <div class="clock-card" id="delhi">
-            <div class="city-name">Delhi</div>
-            <div class="timezone">Asia/Kolkata</div>
+        <div class="clock-card" id="hongkong-taipei">
+            <div class="country-flag">🇭🇰 🇹🇼</div>
+            <div class="city-name">Hong Kong / Taipei</div>
+            <div class="timezone">Asia/Hong_Kong &amp; Asia/Taipei (UTC+8)</div>
             <div class="time-display">--:--:--</div>
             <div class="date-display">---</div>
             <div class="dst-info">
@@ -159,20 +179,10 @@
             </div>
         </div>
 
-        <div class="clock-card" id="hongkong">
-            <div class="city-name">Hong Kong</div>
-            <div class="timezone">Asia/Hong_Kong</div>
-            <div class="time-display">--:--:--</div>
-            <div class="date-display">---</div>
-            <div class="dst-info">
-                <div class="dst-label">DST Information</div>
-                <div class="dst-text">Loading...</div>
-            </div>
-        </div>
-
-        <div class="clock-card" id="tokyo">
+        <div class="clock-card" id="japan">
+            <div class="country-flag">🇯🇵</div>
             <div class="city-name">Tokyo</div>
-            <div class="timezone">Asia/Tokyo</div>
+            <div class="timezone">Asia/Tokyo (JST, UTC+9)</div>
             <div class="time-display">--:--:--</div>
             <div class="date-display">---</div>
             <div class="dst-info">
@@ -184,23 +194,39 @@
 
     <script>
         const cities = [
-            { id: 'paris', timezone: 'Europe/Paris', name: 'Paris' },
-            { id: 'delhi', timezone: 'Asia/Kolkata', name: 'Delhi' },
-            { id: 'hongkong', timezone: 'Asia/Hong_Kong', name: 'Hong Kong' },
-            { id: 'tokyo', timezone: 'Asia/Tokyo', name: 'Tokyo' }
+            { id: 'mexico', timezone: 'America/Mexico_City', name: 'Mexico City' },
+            { id: 'france', timezone: 'Europe/Paris', name: 'Paris' },
+            { id: 'hongkong-taipei', timezone: 'Asia/Hong_Kong', name: 'Hong Kong / Taipei' },
+            { id: 'japan', timezone: 'Asia/Tokyo', name: 'Tokyo' }
         ];
 
-        // DST transition dates for 2025-2026 (approximate)
+        // DST transition dates for 2025-2027
         const dstTransitions = {
+            'America/Mexico_City': [],
+            // Mexico abolished DST nationwide in October 2022.
+            // Only border municipalities near the US still observe it.
+            // Mexico City does NOT observe DST.
+
             'Europe/Paris': [
-                { date: new Date('2025-03-30T01:00:00Z'), type: 'start', description: 'Clocks go forward 1 hour' },
-                { date: new Date('2025-10-26T01:00:00Z'), type: 'end', description: 'Clocks go back 1 hour' },
-                { date: new Date('2026-03-29T01:00:00Z'), type: 'start', description: 'Clocks go forward 1 hour' },
-                { date: new Date('2026-10-25T01:00:00Z'), type: 'end', description: 'Clocks go back 1 hour' }
+                // EU DST: starts last Sunday of March at 01:00 UTC,
+                // ends last Sunday of October at 01:00 UTC
+                { date: new Date('2025-03-30T01:00:00Z'), type: 'start', description: 'Clocks go forward 1 hour (CET -> CEST)' },
+                { date: new Date('2025-10-26T01:00:00Z'), type: 'end', description: 'Clocks go back 1 hour (CEST -> CET)' },
+                { date: new Date('2026-03-29T01:00:00Z'), type: 'start', description: 'Clocks go forward 1 hour (CET -> CEST)' },
+                { date: new Date('2026-10-25T01:00:00Z'), type: 'end', description: 'Clocks go back 1 hour (CEST -> CET)' },
+                { date: new Date('2027-03-28T01:00:00Z'), type: 'start', description: 'Clocks go forward 1 hour (CET -> CEST)' },
+                { date: new Date('2027-10-31T01:00:00Z'), type: 'end', description: 'Clocks go back 1 hour (CEST -> CET)' }
             ],
-            'Asia/Kolkata': [], // India does not observe DST
-            'Asia/Hong_Kong': [], // Hong Kong does not observe DST
+
+            'Asia/Hong_Kong': [], // Hong Kong & Taiwan do not observe DST
             'Asia/Tokyo': [] // Japan does not observe DST
+        };
+
+        // Additional context explaining why DST is not observed
+        const dstNotes = {
+            'America/Mexico_City': 'Mexico abolished DST in October 2022',
+            'Asia/Hong_Kong': 'Hong Kong and Taiwan do not observe DST',
+            'Asia/Tokyo': 'Japan does not observe DST'
         };
 
         function updateClock(city) {
@@ -253,9 +279,10 @@
 
             if (!nextChange) {
                 if (dstTransitions[city.timezone].length === 0) {
-                    dstText.innerHTML = '<span class="no-dst">This region does not observe DST</span>';
+                    const note = dstNotes[city.timezone] || 'This region does not observe DST';
+                    dstText.innerHTML = '<span class="no-dst">' + note + '</span>';
                 } else {
-                    dstText.innerHTML = '<span class="no-dst">No upcoming DST changes</span>';
+                    dstText.innerHTML = '<span class="no-dst">No upcoming DST changes in the listed period</span>';
                 }
                 dstInfo.classList.remove('active');
                 return;
@@ -278,20 +305,19 @@
                 timeZone: city.timezone
             });
 
-            dstText.innerHTML = `
-                <strong>${changeType}</strong> begins on ${dateStr}<br>
-                ${nextChange.description} (in ${daysUntil} day${daysUntil !== 1 ? 's' : ''})
-            `;
+            dstText.innerHTML =
+                '<strong>' + changeType + '</strong> begins on ' + dateStr + '<br>' +
+                nextChange.description + ' (in ' + daysUntil + ' day' + (daysUntil !== 1 ? 's' : '') + ')';
         }
 
         function updateAllClocks() {
-            cities.forEach(city => {
+            cities.forEach(function(city) {
                 updateClock(city);
             });
         }
 
         function initializeDSTInfo() {
-            cities.forEach(city => {
+            cities.forEach(function(city) {
                 updateDSTInfo(city);
             });
         }
