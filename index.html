@@ -88,6 +88,37 @@
             margin-bottom: 8px;
         }
 
+        .weather-info {
+            background: #e8f5e9;
+            border-left: 3px solid #4caf50;
+            padding: 8px;
+            margin-top: 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .weather-icon {
+            font-size: 1.5em;
+        }
+
+        .weather-details {
+            text-align: left;
+        }
+
+        .weather-temp {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .weather-condition {
+            font-size: 0.75em;
+            color: #555;
+        }
+
         .dst-info {
             background: #f0faf5;
             border-left: 3px solid #11998e;
@@ -150,42 +181,13 @@
             <div class="timezone">America/Mexico_City (CST, UTC-6)</div>
             <div class="time-display">--:--:--</div>
             <div class="date-display">---</div>
-            <div class="dst-info">
-                <div class="dst-label">DST Information</div>
-                <div class="dst-text">Loading...</div>
+            <div class="weather-info">
+                <div class="weather-icon">🌤️</div>
+                <div class="weather-details">
+                    <div class="weather-temp">Loading...</div>
+                    <div class="weather-condition">--</div>
+                </div>
             </div>
-        </div>
-
-        <div class="clock-card" id="france">
-            <div class="country-flag">🇫🇷</div>
-            <div class="city-name">Paris</div>
-            <div class="timezone">Europe/Paris (CET/CEST, UTC+1/+2)</div>
-            <div class="time-display">--:--:--</div>
-            <div class="date-display">---</div>
-            <div class="dst-info">
-                <div class="dst-label">DST Information</div>
-                <div class="dst-text">Loading...</div>
-            </div>
-        </div>
-
-        <div class="clock-card" id="hongkong-taipei">
-            <div class="country-flag">🇭🇰 🇹🇼</div>
-            <div class="city-name">Hong Kong / Taipei</div>
-            <div class="timezone">Asia/Hong_Kong &amp; Asia/Taipei (UTC+8)</div>
-            <div class="time-display">--:--:--</div>
-            <div class="date-display">---</div>
-            <div class="dst-info">
-                <div class="dst-label">DST Information</div>
-                <div class="dst-text">Loading...</div>
-            </div>
-        </div>
-
-        <div class="clock-card" id="japan">
-            <div class="country-flag">🇯🇵</div>
-            <div class="city-name">Tokyo</div>
-            <div class="timezone">Asia/Tokyo (JST, UTC+9)</div>
-            <div class="time-display">--:--:--</div>
-            <div class="date-display">---</div>
             <div class="dst-info">
                 <div class="dst-label">DST Information</div>
                 <div class="dst-text">Loading...</div>
@@ -198,6 +200,70 @@
             <div class="timezone">America/Montreal (EST/EDT, UTC-5/-4)</div>
             <div class="time-display">--:--:--</div>
             <div class="date-display">---</div>
+            <div class="weather-info">
+                <div class="weather-icon">🌤️</div>
+                <div class="weather-details">
+                    <div class="weather-temp">Loading...</div>
+                    <div class="weather-condition">--</div>
+                </div>
+            </div>
+            <div class="dst-info">
+                <div class="dst-label">DST Information</div>
+                <div class="dst-text">Loading...</div>
+            </div>
+        </div>
+
+        <div class="clock-card" id="france">
+            <div class="country-flag">🇫🇷</div>
+            <div class="city-name">Paris</div>
+            <div class="timezone">Europe/Paris (CET/CEST, UTC+1/+2)</div>
+            <div class="time-display">--:--:--</div>
+            <div class="date-display">---</div>
+            <div class="weather-info">
+                <div class="weather-icon">🌤️</div>
+                <div class="weather-details">
+                    <div class="weather-temp">Loading...</div>
+                    <div class="weather-condition">--</div>
+                </div>
+            </div>
+            <div class="dst-info">
+                <div class="dst-label">DST Information</div>
+                <div class="dst-text">Loading...</div>
+            </div>
+        </div>
+
+        <div class="clock-card" id="hongkong-taipei">
+            <div class="country-flag">🇭🇰 🇹🇼</div>
+            <div class="city-name">Hong Kong / Taipei</div>
+            <div class="timezone">Asia/Hong_Kong &amp; Asia/Taipei (UTC+8)</div>
+            <div class="time-display">--:--:--</div>
+            <div class="date-display">---</div>
+            <div class="weather-info">
+                <div class="weather-icon">🌤️</div>
+                <div class="weather-details">
+                    <div class="weather-temp">Loading...</div>
+                    <div class="weather-condition">--</div>
+                </div>
+            </div>
+            <div class="dst-info">
+                <div class="dst-label">DST Information</div>
+                <div class="dst-text">Loading...</div>
+            </div>
+        </div>
+
+        <div class="clock-card" id="japan">
+            <div class="country-flag">🇯🇵</div>
+            <div class="city-name">Tokyo</div>
+            <div class="timezone">Asia/Tokyo (JST, UTC+9)</div>
+            <div class="time-display">--:--:--</div>
+            <div class="date-display">---</div>
+            <div class="weather-info">
+                <div class="weather-icon">🌤️</div>
+                <div class="weather-details">
+                    <div class="weather-temp">Loading...</div>
+                    <div class="weather-condition">--</div>
+                </div>
+            </div>
             <div class="dst-info">
                 <div class="dst-label">DST Information</div>
                 <div class="dst-text">Loading...</div>
@@ -207,11 +273,11 @@
 
     <script>
         const cities = [
-            { id: 'mexico', timezone: 'America/Mexico_City', name: 'Mexico City' },
-            { id: 'france', timezone: 'Europe/Paris', name: 'Paris' },
-            { id: 'hongkong-taipei', timezone: 'Asia/Hong_Kong', name: 'Hong Kong / Taipei' },
-            { id: 'japan', timezone: 'Asia/Tokyo', name: 'Tokyo' },
-            { id: 'montreal', timezone: 'America/Montreal', name: 'Montreal' }
+            { id: 'mexico', timezone: 'America/Mexico_City', name: 'Mexico City', lat: 19.4326, lon: -99.1332 },
+            { id: 'montreal', timezone: 'America/Montreal', name: 'Montreal', lat: 45.5017, lon: -73.5673 },
+            { id: 'france', timezone: 'Europe/Paris', name: 'Paris', lat: 48.8566, lon: 2.3522 },
+            { id: 'hongkong-taipei', timezone: 'Asia/Hong_Kong', name: 'Hong Kong / Taipei', lat: 22.3193, lon: 114.1694 },
+            { id: 'japan', timezone: 'Asia/Tokyo', name: 'Tokyo', lat: 35.6762, lon: 139.6503 }
         ];
 
         // DST transition dates for 2025-2027
@@ -347,13 +413,82 @@
             });
         }
 
+        // Weather code to emoji and description mapping
+        function getWeatherInfo(weatherCode) {
+            const weatherMap = {
+                0: { icon: '☀️', description: 'Clear sky' },
+                1: { icon: '🌤️', description: 'Mainly clear' },
+                2: { icon: '⛅', description: 'Partly cloudy' },
+                3: { icon: '☁️', description: 'Overcast' },
+                45: { icon: '🌫️', description: 'Foggy' },
+                48: { icon: '🌫️', description: 'Foggy' },
+                51: { icon: '🌦️', description: 'Light drizzle' },
+                53: { icon: '🌦️', description: 'Drizzle' },
+                55: { icon: '🌧️', description: 'Heavy drizzle' },
+                61: { icon: '🌧️', description: 'Light rain' },
+                63: { icon: '🌧️', description: 'Rain' },
+                65: { icon: '🌧️', description: 'Heavy rain' },
+                71: { icon: '🌨️', description: 'Light snow' },
+                73: { icon: '🌨️', description: 'Snow' },
+                75: { icon: '🌨️', description: 'Heavy snow' },
+                77: { icon: '🌨️', description: 'Snow grains' },
+                80: { icon: '🌦️', description: 'Light showers' },
+                81: { icon: '🌧️', description: 'Showers' },
+                82: { icon: '⛈️', description: 'Heavy showers' },
+                85: { icon: '🌨️', description: 'Light snow showers' },
+                86: { icon: '🌨️', description: 'Snow showers' },
+                95: { icon: '⛈️', description: 'Thunderstorm' },
+                96: { icon: '⛈️', description: 'Thunderstorm with hail' },
+                99: { icon: '⛈️', description: 'Thunderstorm with hail' }
+            };
+            return weatherMap[weatherCode] || { icon: '🌤️', description: 'Unknown' };
+        }
+
+        async function fetchWeather(city) {
+            try {
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current_weather=true&temperature_unit=celsius`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.current_weather) {
+                    const temp = Math.round(data.current_weather.temperature);
+                    const weatherCode = data.current_weather.weathercode;
+                    const weatherInfo = getWeatherInfo(weatherCode);
+
+                    const card = document.getElementById(city.id);
+                    const weatherIcon = card.querySelector('.weather-icon');
+                    const weatherTemp = card.querySelector('.weather-temp');
+                    const weatherCondition = card.querySelector('.weather-condition');
+
+                    weatherIcon.textContent = weatherInfo.icon;
+                    weatherTemp.textContent = temp + '°C';
+                    weatherCondition.textContent = weatherInfo.description;
+                }
+            } catch (error) {
+                console.error('Error fetching weather for ' + city.name + ':', error);
+                const card = document.getElementById(city.id);
+                const weatherTemp = card.querySelector('.weather-temp');
+                weatherTemp.textContent = 'N/A';
+            }
+        }
+
+        function updateAllWeather() {
+            cities.forEach(function(city) {
+                fetchWeather(city);
+            });
+        }
+
         // Update clocks immediately and then every second
         updateAllClocks();
         initializeDSTInfo();
+        updateAllWeather();
         setInterval(updateAllClocks, 1000);
 
         // Update DST info every hour
         setInterval(initializeDSTInfo, 3600000);
+
+        // Update weather every 10 minutes
+        setInterval(updateAllWeather, 600000);
     </script>
 </body>
 </html>
