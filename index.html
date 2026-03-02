@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World Clocks - Mexico, France, Hong Kong/Taipei, Japan</title>
+    <title>World Clocks - Mexico, France, Hong Kong/Taipei, Japan, Canada</title>
     <style>
         * {
             margin: 0;
@@ -18,83 +18,83 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 10px;
         }
 
         h1 {
             color: white;
-            margin: 30px 0;
+            margin: 15px 0 10px;
             text-align: center;
-            font-size: 2.5em;
+            font-size: 1.8em;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .clocks-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
             width: 100%;
-            max-width: 1400px;
-            padding: 20px;
+            max-width: 1600px;
+            padding: 10px;
         }
 
         .clock-card {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .clock-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .city-name {
-            font-size: 1.8em;
+            font-size: 1.3em;
             font-weight: bold;
             color: #11998e;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             text-align: center;
         }
 
         .country-flag {
             text-align: center;
-            font-size: 2em;
-            margin-bottom: 5px;
+            font-size: 1.5em;
+            margin-bottom: 3px;
         }
 
         .timezone {
-            font-size: 0.9em;
+            font-size: 0.75em;
             color: #666;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .time-display {
-            font-size: 3em;
+            font-size: 2em;
             font-weight: bold;
             text-align: center;
             color: #333;
-            margin: 20px 0;
+            margin: 8px 0;
             font-variant-numeric: tabular-nums;
         }
 
         .date-display {
-            font-size: 1.1em;
+            font-size: 0.85em;
             text-align: center;
             color: #666;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
 
         .dst-info {
             background: #f0faf5;
-            border-left: 4px solid #11998e;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 5px;
-            min-height: 60px;
+            border-left: 3px solid #11998e;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+            min-height: 50px;
         }
 
         .dst-info.active {
@@ -105,8 +105,8 @@
         .dst-label {
             font-weight: bold;
             color: #11998e;
-            font-size: 0.9em;
-            margin-bottom: 5px;
+            font-size: 0.75em;
+            margin-bottom: 4px;
         }
 
         .dst-info.active .dst-label {
@@ -114,9 +114,9 @@
         }
 
         .dst-text {
-            font-size: 0.95em;
+            font-size: 0.8em;
             color: #555;
-            line-height: 1.4;
+            line-height: 1.3;
         }
 
         .no-dst {
@@ -126,15 +126,16 @@
 
         @media (max-width: 768px) {
             h1 {
-                font-size: 1.8em;
+                font-size: 1.4em;
             }
 
             .time-display {
-                font-size: 2.2em;
+                font-size: 1.8em;
             }
 
             .clocks-container {
                 grid-template-columns: 1fr;
+                gap: 10px;
             }
         }
     </style>
@@ -190,6 +191,18 @@
                 <div class="dst-text">Loading...</div>
             </div>
         </div>
+
+        <div class="clock-card" id="montreal">
+            <div class="country-flag">🇨🇦</div>
+            <div class="city-name">Montreal</div>
+            <div class="timezone">America/Montreal (EST/EDT, UTC-5/-4)</div>
+            <div class="time-display">--:--:--</div>
+            <div class="date-display">---</div>
+            <div class="dst-info">
+                <div class="dst-label">DST Information</div>
+                <div class="dst-text">Loading...</div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -197,7 +210,8 @@
             { id: 'mexico', timezone: 'America/Mexico_City', name: 'Mexico City' },
             { id: 'france', timezone: 'Europe/Paris', name: 'Paris' },
             { id: 'hongkong-taipei', timezone: 'Asia/Hong_Kong', name: 'Hong Kong / Taipei' },
-            { id: 'japan', timezone: 'Asia/Tokyo', name: 'Tokyo' }
+            { id: 'japan', timezone: 'Asia/Tokyo', name: 'Tokyo' },
+            { id: 'montreal', timezone: 'America/Montreal', name: 'Montreal' }
         ];
 
         // DST transition dates for 2025-2027
@@ -219,7 +233,18 @@
             ],
 
             'Asia/Hong_Kong': [], // Hong Kong & Taiwan do not observe DST
-            'Asia/Tokyo': [] // Japan does not observe DST
+            'Asia/Tokyo': [], // Japan does not observe DST
+
+            'America/Montreal': [
+                // Canada DST: starts 2nd Sunday of March at 2:00 AM,
+                // ends 1st Sunday of November at 2:00 AM
+                { date: new Date('2025-03-09T07:00:00Z'), type: 'start', description: 'Clocks go forward 1 hour (EST -> EDT)' },
+                { date: new Date('2025-11-02T06:00:00Z'), type: 'end', description: 'Clocks go back 1 hour (EDT -> EST)' },
+                { date: new Date('2026-03-08T07:00:00Z'), type: 'start', description: 'Clocks go forward 1 hour (EST -> EDT)' },
+                { date: new Date('2026-11-01T06:00:00Z'), type: 'end', description: 'Clocks go back 1 hour (EDT -> EST)' },
+                { date: new Date('2027-03-14T07:00:00Z'), type: 'start', description: 'Clocks go forward 1 hour (EST -> EDT)' },
+                { date: new Date('2027-11-07T06:00:00Z'), type: 'end', description: 'Clocks go back 1 hour (EDT -> EST)' }
+            ]
         };
 
         // Additional context explaining why DST is not observed
