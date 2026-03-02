@@ -156,6 +156,18 @@
             </div>
         </div>
 
+        <div class="clock-card" id="montreal">
+            <div class="country-flag">🇨🇦</div>
+            <div class="city-name">Montreal</div>
+            <div class="timezone">America/Montreal (EST/EDT, UTC-5/-4)</div>
+            <div class="time-display">--:--:--</div>
+            <div class="date-display">---</div>
+            <div class="dst-info">
+                <div class="dst-label">DST Information</div>
+                <div class="dst-text">Loading...</div>
+            </div>
+        </div>
+
         <div class="clock-card" id="france">
             <div class="country-flag">🇫🇷</div>
             <div class="city-name">Paris</div>
@@ -191,27 +203,15 @@
                 <div class="dst-text">Loading...</div>
             </div>
         </div>
-
-        <div class="clock-card" id="montreal">
-            <div class="country-flag">🇨🇦</div>
-            <div class="city-name">Montreal</div>
-            <div class="timezone">America/Montreal (EST/EDT, UTC-5/-4)</div>
-            <div class="time-display">--:--:--</div>
-            <div class="date-display">---</div>
-            <div class="dst-info">
-                <div class="dst-label">DST Information</div>
-                <div class="dst-text">Loading...</div>
-            </div>
-        </div>
     </div>
 
     <script>
         const cities = [
             { id: 'mexico', timezone: 'America/Mexico_City', name: 'Mexico City' },
+            { id: 'montreal', timezone: 'America/Montreal', name: 'Montreal' },
             { id: 'france', timezone: 'Europe/Paris', name: 'Paris' },
             { id: 'hongkong-taipei', timezone: 'Asia/Hong_Kong', name: 'Hong Kong / Taipei' },
-            { id: 'japan', timezone: 'Asia/Tokyo', name: 'Tokyo' },
-            { id: 'montreal', timezone: 'America/Montreal', name: 'Montreal' }
+            { id: 'japan', timezone: 'Asia/Tokyo', name: 'Tokyo' }
         ];
 
         // DST transition dates for 2025-2027
