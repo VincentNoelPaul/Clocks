@@ -30,12 +30,25 @@
         }
 
         .clocks-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 15px;
+            position: relative;
             width: 100%;
             max-width: 1600px;
             padding: 10px;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: flex-start;
+        }
+
+        .equator-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            z-index: 1;
         }
 
         .clock-card {
@@ -44,6 +57,9 @@
             padding: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 240px;
+            position: relative;
+            z-index: 2;
         }
 
         .clock-card:hover {
@@ -114,6 +130,12 @@
             color: #2e7d32;
         }
 
+        .weather-latitude {
+            font-size: 0.7em;
+            color: #666;
+            margin-top: 2px;
+        }
+
         .weather-condition {
             font-size: 0.75em;
             color: #555;
@@ -182,8 +204,18 @@
             }
 
             .clocks-container {
-                grid-template-columns: 1fr;
+                flex-direction: column;
+                align-items: center;
                 gap: 10px;
+            }
+
+            .clock-card {
+                position: static !important;
+                margin-top: 0 !important;
+            }
+
+            .equator-line {
+                display: none;
             }
         }
     </style>
@@ -192,6 +224,7 @@
     <h1>🌍 World Clocks</h1>
 
     <div class="clocks-container">
+        <div class="equator-line"></div>
         <div class="clock-card" id="mexico">
             <div class="country-flag">🇲🇽</div>
             <div class="city-name">Mexico City</div>
@@ -202,6 +235,7 @@
                 <div class="weather-icon">🌤️</div>
                 <div class="weather-details">
                     <div class="weather-temp">Loading...</div>
+                    <div class="weather-latitude">--</div>
                     <div class="weather-condition">--</div>
                 </div>
             </div>
@@ -229,6 +263,7 @@
                 <div class="weather-icon">🌤️</div>
                 <div class="weather-details">
                     <div class="weather-temp">Loading...</div>
+                    <div class="weather-latitude">--</div>
                     <div class="weather-condition">--</div>
                 </div>
             </div>
@@ -252,6 +287,7 @@
                 <div class="weather-icon">🌤️</div>
                 <div class="weather-details">
                     <div class="weather-temp">Loading...</div>
+                    <div class="weather-latitude">--</div>
                     <div class="weather-condition">--</div>
                 </div>
             </div>
@@ -275,6 +311,7 @@
                 <div class="weather-icon">🌤️</div>
                 <div class="weather-details">
                     <div class="weather-temp">Loading...</div>
+                    <div class="weather-latitude">--</div>
                     <div class="weather-condition">--</div>
                 </div>
             </div>
@@ -298,6 +335,7 @@
                 <div class="weather-icon">🌤️</div>
                 <div class="weather-details">
                     <div class="weather-temp">Loading...</div>
+                    <div class="weather-latitude">--</div>
                     <div class="weather-condition">--</div>
                 </div>
             </div>
@@ -320,6 +358,42 @@
             { id: 'hongkong-taipei', timezone: 'Asia/Hong_Kong', name: 'Hong Kong / Taipei', lat: 22.3193, lon: 114.1694 },
             { id: 'japan', timezone: 'Asia/Tokyo', name: 'Tokyo', lat: 35.6762, lon: 139.6503 }
         ];
+
+        // Position cards based on latitude
+        function positionCardsByLatitude() {
+            const container = document.querySelector('.clocks-container');
+            const equatorLine = document.querySelector('.equator-line');
+
+            // Find min and max latitudes
+            const latitudes = cities.map(c => c.lat);
+            const minLat = Math.min(...latitudes);
+            const maxLat = Math.max(...latitudes);
+
+            // Add margin below equator (0°)
+            const lowerBound = Math.min(0, minLat) - 10; // 10° margin below equator or lowest city
+            const upperBound = maxLat + 5; // 5° margin above highest city
+            const totalRange = upperBound - lowerBound;
+
+            // Calculate available height (80vh minus some padding)
+            const containerHeight = window.innerHeight * 0.75;
+
+            // Position equator line
+            const equatorPosition = ((upperBound - 0) / totalRange) * containerHeight;
+            equatorLine.style.top = equatorPosition + 'px';
+
+            // Position each card
+            cities.forEach(city => {
+                const card = document.getElementById(city.id);
+                const position = ((upperBound - city.lat) / totalRange) * containerHeight;
+                card.style.marginTop = position + 'px';
+
+                // Set latitude display
+                const latDisplay = card.querySelector('.weather-latitude');
+                const latValue = Math.abs(city.lat).toFixed(2);
+                const hemisphere = city.lat >= 0 ? 'N' : 'S';
+                latDisplay.textContent = latValue + '°' + hemisphere;
+            });
+        }
 
         // DST transition dates for 2025-2027
         const dstTransitions = {
@@ -548,6 +622,7 @@
         updateAllClocks();
         initializeDSTInfo();
         updateAllWeather();
+        positionCardsByLatitude();
         setInterval(updateAllClocks, 1000);
 
         // Update DST info every hour
@@ -555,6 +630,9 @@
 
         // Update weather every 10 minutes
         setInterval(updateAllWeather, 600000);
+
+        // Reposition cards on window resize
+        window.addEventListener('resize', positionCardsByLatitude);
     </script>
 </body>
 </html>
