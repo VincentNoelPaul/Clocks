@@ -556,7 +556,9 @@
         }
 
         function formatTimeInTimezone(isoTime, timezone) {
-            const date = new Date(isoTime);
+            // Ensure the ISO string is treated as UTC by appending 'Z' if not present
+            const utcTime = isoTime.endsWith('Z') ? isoTime : isoTime + 'Z';
+            const date = new Date(utcTime);
             const options = {
                 timeZone: timezone,
                 hour: '2-digit',
