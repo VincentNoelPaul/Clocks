@@ -322,9 +322,9 @@
         </div>
 
         <div class="clock-card" id="japan">
-            <div class="country-flag">🇯🇵</div>
-            <div class="city-name">Tokyo</div>
-            <div class="timezone">Asia/Tokyo (JST, UTC+9)</div>
+            <div class="country-flag">🇯🇵 🇰🇷</div>
+            <div class="city-name">Tokyo / Seoul</div>
+            <div class="timezone">Asia/Tokyo &amp; Asia/Seoul (JST/KST, UTC+9)</div>
             <div class="time-display">--:--:--</div>
             <div class="date-display">---</div>
             <div class="weather-info">
@@ -352,7 +352,7 @@
             { id: 'montreal', timezone: 'America/Montreal', name: 'Montreal', lat: 45.5017, lon: -73.5673 },
             { id: 'france', timezone: 'Europe/Paris', name: 'Paris', lat: 48.8566, lon: 2.3522 },
             { id: 'hongkong-taipei', timezone: 'Asia/Hong_Kong', name: 'Hong Kong / Taipei', lat: 22.3193, lon: 114.1694 },
-            { id: 'japan', timezone: 'Asia/Tokyo', name: 'Tokyo', lat: 35.6762, lon: 139.6503 }
+            { id: 'japan', timezone: 'Asia/Tokyo', name: 'Tokyo / Seoul', lat: 37.5665, lon: 126.9780 }
         ];
 
         // Position cards based on latitude
@@ -568,7 +568,7 @@
 
         async function fetchWeather(city) {
             try {
-                const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current_weather=true&daily=sunrise,sunset&forecast_days=1&temperature_unit=celsius&timezone=auto`;
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current_weather=true&daily=sunrise,sunset&forecast_days=1&temperature_unit=celsius`;
                 const response = await fetch(url);
                 const data = await response.json();
 
