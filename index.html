@@ -30,12 +30,25 @@
         }
 
         .clocks-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 15px;
+            position: relative;
             width: 100%;
             max-width: 1600px;
             padding: 10px;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: flex-start;
+        }
+
+        .equator-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            z-index: 1;
         }
 
         .clock-card {
@@ -44,6 +57,9 @@
             padding: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 240px;
+            position: relative;
+            z-index: 2;
         }
 
         .clock-card:hover {
@@ -172,8 +188,20 @@
             }
 
             .clocks-container {
-                grid-template-columns: 1fr;
+                flex-direction: column;
+                align-items: center;
                 gap: 10px;
+                min-height: 0;
+            }
+
+            .clock-card {
+                width: 100%;
+                max-width: 400px;
+                margin-top: 0 !important;
+            }
+
+            .equator-line {
+                display: none;
             }
         }
     </style>
@@ -182,6 +210,7 @@
     <h1>🌍 World Clocks</h1>
 
     <div class="clocks-container">
+        <div class="equator-line"></div>
         <div class="clock-card" id="mexico">
             <div class="country-flag">🇲🇽</div>
             <div class="city-name">Mexico City</div>
@@ -356,6 +385,40 @@
             'Asia/Hong_Kong': 'Hong Kong and Taiwan do not observe DST',
             'Asia/Tokyo': 'Japan does not observe DST'
         };
+
+        // Lay the cards out geographically: each card sits at a vertical
+        // distance from the Equator line proportional to its latitude, while
+        // left-to-right order stays the cities' local-time order (DOM order).
+        function positionCardsByLatitude() {
+            const equatorLine = document.querySelector('.equator-line');
+
+            const latitudes = cities.map(function(c) { return c.lat; });
+            const minLat = Math.min.apply(null, latitudes);
+            const maxLat = Math.max.apply(null, latitudes);
+
+            // Keep the Equator on screen even when every city is north of it,
+            // and leave a little headroom above the northernmost card.
+            const lowerBound = Math.min(0, minLat) - 10;
+            const upperBound = Math.max(0, maxLat) + 5;
+            const totalRange = upperBound - lowerBound;
+
+            const containerHeight = window.innerHeight * 0.75;
+            const offsetFor = function(lat) {
+                return ((upperBound - lat) / totalRange) * containerHeight;
+            };
+
+            // The cards are flex items offset from the container's content box,
+            // while the line is absolutely positioned against its padding box;
+            // add the padding back so the two share one reference frame.
+            const container = document.querySelector('.clocks-container');
+            const paddingTop = parseFloat(getComputedStyle(container).paddingTop) || 0;
+            equatorLine.style.top = (offsetFor(0) + paddingTop) + 'px';
+
+            cities.forEach(function(city) {
+                document.getElementById(city.id).style.marginTop =
+                    offsetFor(city.lat) + 'px';
+            });
+        }
 
         // Distance along the meridian from the Equator, using the standard
         // series approximation of the meridian arc (accurate to a few metres).
@@ -545,6 +608,8 @@
 
         // Static per-city facts: render once at startup
         cities.forEach(updateEquatorInfo);
+        positionCardsByLatitude();
+        window.addEventListener('resize', positionCardsByLatitude);
 
         // Update clocks immediately and then every second
         updateAllClocks();
