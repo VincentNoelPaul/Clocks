@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World Clocks - Mexico, France, Hong Kong/Taipei, Japan, Canada</title>
+    <title>World Clocks - Mexico, France, Hong Kong/Taipei, Japan, Canada, French Guiana</title>
     <style>
         * {
             margin: 0;
@@ -213,6 +213,25 @@
             </div>
         </div>
 
+        <div class="clock-card" id="cayenne">
+            <div class="country-flag">🇬🇫</div>
+            <div class="city-name">Cayenne</div>
+            <div class="timezone">America/Cayenne (GFT, UTC-3)</div>
+            <div class="time-display">--:--:--</div>
+            <div class="date-display">---</div>
+            <div class="weather-info">
+                <div class="weather-icon">🌤️</div>
+                <div class="weather-details">
+                    <div class="weather-temp">Loading...</div>
+                    <div class="weather-condition">--</div>
+                </div>
+            </div>
+            <div class="dst-info">
+                <div class="dst-label">DST Information</div>
+                <div class="dst-text">Loading...</div>
+            </div>
+        </div>
+
         <div class="clock-card" id="france">
             <div class="country-flag">🇫🇷</div>
             <div class="city-name">Paris</div>
@@ -275,6 +294,7 @@
         const cities = [
             { id: 'mexico', timezone: 'America/Mexico_City', name: 'Mexico City', lat: 19.4326, lon: -99.1332 },
             { id: 'montreal', timezone: 'America/Montreal', name: 'Montreal', lat: 45.5017, lon: -73.5673 },
+            { id: 'cayenne', timezone: 'America/Cayenne', name: 'Cayenne', lat: 4.9227, lon: -52.3269 },
             { id: 'france', timezone: 'Europe/Paris', name: 'Paris', lat: 48.8566, lon: 2.3522 },
             { id: 'hongkong-taipei', timezone: 'Asia/Hong_Kong', name: 'Hong Kong / Taipei', lat: 22.3193, lon: 114.1694 },
             { id: 'japan', timezone: 'Asia/Tokyo', name: 'Tokyo', lat: 35.6762, lon: 139.6503 }
@@ -298,6 +318,9 @@
                 { date: new Date('2027-10-31T01:00:00Z'), type: 'end', description: 'Clocks go back 1 hour (CEST -> CET)' }
             ],
 
+            'America/Cayenne': [],
+            // French Guiana has never observed DST.
+
             'Asia/Hong_Kong': [], // Hong Kong & Taiwan do not observe DST
             'Asia/Tokyo': [], // Japan does not observe DST
 
@@ -316,6 +339,7 @@
         // Additional context explaining why DST is not observed
         const dstNotes = {
             'America/Mexico_City': 'Mexico abolished DST in October 2022',
+            'America/Cayenne': 'French Guiana does not observe DST',
             'Asia/Hong_Kong': 'Hong Kong and Taiwan do not observe DST',
             'Asia/Tokyo': 'Japan does not observe DST'
         };
